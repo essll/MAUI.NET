@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AnaderiaDemo.MainPage"
+             xmlns:anaderiaControls="clr-namespace:AnaderiaDemo.UserControls"
+             WidthRequest="650">
+
+    <ScrollView WidthRequest="600">
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0">
+
+            <Image
+                Source="banner.png"
+                SemanticProperties.Description="Banner here"
+                HeightRequest="200"
+                HorizontalOptions="Start" />
+
+            <HorizontalStackLayout Spacing="130">
+                <Button x:Name="Previous" Text="Previous" Clicked="Previous_Clicked" HorizontalOptions="Start" />
+                <Button x:Name="DeleteNote" Text="Delete Note" Clicked="DeleteNote_Clicked" HorizontalOptions="Center" />
+                <Button x:Name="Next" Text="Next" Clicked="Next_Clicked" HorizontalOptions="End" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="5">
+
+                <Label WidthRequest="100" Text="Fecha:" />
+                
+                <DatePicker x:Name="Fecha" />
+
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="5">
+
+                <Label WidthRequest="100" Text="Nombre:" />
+
+                <Entry x:Name="Nombre" WidthRequest="200"></Entry>
+
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="50">
+                <Label Text="Piece"/>
+                <Label Text="Quantity"/>
+                <Label Text="Description"/>
+                <Label Text="Price"/>
+                <Label Text="Amount"/>
+                <Button x:Name="AddNoteLine" Text="+" Clicked="AddNoteLine_Clicked" />
+            </HorizontalStackLayout>
+
+            <VerticalStackLayout x:Name="NoteLines">
+                
+            </VerticalStackLayout>
+
+            <Button x:Name="Save" Clicked="Save_Clicked" Text="Save" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
