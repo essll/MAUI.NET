@@ -196,12 +196,43 @@ namespace AnaderiaDemo
 
         private async void DeleteNote_Clicked(object sender, EventArgs e)
         {
-            if (notesCounter < 0)
-                return;
+            try
+            {
+                if (notesCounter < 0)
+                    return;
+
+                var allNoteLines = await Database.GetItems<NoteLine>();
+                if (allNoteLines.Count() == 0)
+                    return;
+                var noteLines = allNoteLines.Where(noteLine => noteLine.NoteId == notes[notesCounter].Id);
+
+                var canDeleteNote = true;
+
+                foreach (var noteLine in noteLines)
+                {
+                    var deletedNoteLines = await Database.DeleteItem(noteLine);
+                    if (deletedNoteLines != 1)
+                    {
+                        canDeleteNote = false;
+                        return;
+                    }
+                }
+                if (canDeleteNote)
+                {
+                    var deletedNotes = await Database.DeleteItem(notes[notesCounter]);
+                    if (deletedNotes != 1)
+                    {
+                        DeleteNote.Text = "Error";
+                    }
+                }
+
+                FetchNotesFromDatabase();
+            }
+            catch (Exception)
+            {
+                DeleteNote.Text = "Error";
+            }
             
-            var deletedNotes = await Database.DeleteItem(notes[notesCounter]);
-            
-            FetchNotesFromDatabase();
         }
     }
 }
