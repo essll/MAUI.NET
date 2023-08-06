@@ -50,15 +50,18 @@
                 Margin = 5,
                 Padding = 5
             };
-            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 100 });
-            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 100 });
-            container.ColumnDefinitions.Add(new ColumnDefinition() { Width =  GridLength.Star});
-            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 100 });
-            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 100 });
-            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 50 });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star});
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 40 });
 
+            piece.Unfocused += Entry_Unfocused;
+            description.Unfocused += Entry_Unfocused;
             quantity.Unfocused += Entry_Unfocused;
             price.Unfocused += Entry_Unfocused;
+
             amount.IsEnabled = false;
             removeLine.Clicked += RemoveLine_Clicked;
 
