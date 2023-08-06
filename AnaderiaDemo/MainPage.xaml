@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AnaderiaDemo.MainPage"
-             xmlns:anaderiaControls="clr-namespace:AnaderiaDemo.UserControls">
+             xmlns:anaderiaControls="clr-namespace:AnaderiaDemo.UserControls"
+             MinimumWidthRequest="600">
 
     <ScrollView>
         <VerticalStackLayout
@@ -12,7 +13,9 @@
             <Image
                 Source="banner.png"
                 SemanticProperties.Description="Banner here"
-                HorizontalOptions="Start" Margin="5" />
+                Margin="5"
+                MaximumHeightRequest="200"
+                HorizontalOptions="Center"/>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -33,14 +36,11 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="NewNote" Text="New Note" Grid.Column="0"/>
-                <Button x:Name="PrintNote" Text="Print Note" MaximumWidthRequest="200" Grid.Column="1"/>
+                <Button x:Name="NewNote" Text="New Note" Clicked="NewNote_Clicked" Grid.Column="0"/>
+                <!--<Button x:Name="PrintNote" Text="Print Note" MaximumWidthRequest="200" Grid.Column="1"/>-->
                 <Button x:Name="DeleteNote" Text="Delete Note" Clicked="DeleteNote_Clicked" Grid.Column="2"/>
 
             </Grid>
-
-            <StackLayout Orientation="Vertical">
-                </StackLayout>
 
             <HorizontalStackLayout Spacing="5">
 

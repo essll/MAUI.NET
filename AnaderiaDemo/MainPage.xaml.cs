@@ -20,11 +20,14 @@ namespace AnaderiaDemo
             if(notes.Count() > 0)
                 LoadNote();
             else
-                InitializeNoteLines();
+                InitializeNewNote();
         }
 
         private void LoadNote()
         {
+            while (notesCounter >= notes.Count())
+                notesCounter--;
+
             Nombre.Text = notes[notesCounter].Name;
             LoadNoteLines();    
         }
@@ -54,14 +57,25 @@ namespace AnaderiaDemo
             }
         }
 
-        private void InitializeNoteLines()
+        private void InitializeNewNote()
         {
-            for(int i = 0; i < 5; i++) 
+            Fecha.Date = DateTime.Now;
+            Nombre.Text = string.Empty;
+
+            foreach(UserControls.NoteLine noteLine in NoteLines.Children)
+            {
+                noteLine.RemoveLine -= NoteLine_RemoveLine;
+            }
+
+            NoteLines.Children.Clear();
+
+            for (int i = 0; i < 9; i++) 
             {
                 var noteLine = new UserControls.NoteLine();
                 noteLine.RemoveLine += NoteLine_RemoveLine;
                 NoteLines.Children.Add(noteLine);
             }
+            notesCounter = notes.Count();
         }
 
         private void NoteLine_RemoveLine(object sender, EventArgs e)
@@ -73,7 +87,9 @@ namespace AnaderiaDemo
         {
             try
             {
-                if (notes is not null &&  notes.Count > 0)
+                if (notes is not null &&
+                    notes.Count > 0 &&
+                    notesCounter < notes.Count)
                 {
                     await UpdateNote();
                 }
@@ -204,6 +220,12 @@ namespace AnaderiaDemo
                 var allNoteLines = await Database.GetItems<NoteLine>();
                 if (allNoteLines.Count() == 0)
                     return;
+                if (notesCounter >= notes.Count())
+                {
+                    notesCounter--;
+                    FetchNotesFromDatabase();
+                    return;
+                }
                 var noteLines = allNoteLines.Where(noteLine => noteLine.NoteId == notes[notesCounter].Id);
 
                 var canDeleteNote = true;
@@ -219,20 +241,20 @@ namespace AnaderiaDemo
                 }
                 if (canDeleteNote)
                 {
-                    var deletedNotes = await Database.DeleteItem(notes[notesCounter]);
-                    if (deletedNotes != 1)
-                    {
-                        DeleteNote.Text = "Error";
-                    }
+                    await Database.DeleteItem(notes[notesCounter]);
                 }
 
                 FetchNotesFromDatabase();
             }
             catch (Exception)
             {
-                DeleteNote.Text = "Error";
             }
             
+        }
+
+        private void NewNote_Clicked(object sender, EventArgs e)
+        {            
+            InitializeNewNote();
         }
     }
 }
