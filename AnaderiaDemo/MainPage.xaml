@@ -2,25 +2,45 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AnaderiaDemo.MainPage"
-             xmlns:anaderiaControls="clr-namespace:AnaderiaDemo.UserControls"
-             WidthRequest="650">
+             xmlns:anaderiaControls="clr-namespace:AnaderiaDemo.UserControls">
 
-    <ScrollView WidthRequest="600">
+    <ScrollView>
         <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0">
+            Spacing="5"
+            Padding="15">
 
             <Image
                 Source="banner.png"
                 SemanticProperties.Description="Banner here"
-                HeightRequest="200"
-                HorizontalOptions="Start" />
+                HorizontalOptions="Start" Margin="5" />
 
-            <HorizontalStackLayout Spacing="130">
-                <Button x:Name="Previous" Text="Previous" Clicked="Previous_Clicked" HorizontalOptions="Start" />
-                <Button x:Name="DeleteNote" Text="Delete Note" Clicked="DeleteNote_Clicked" HorizontalOptions="Center" />
-                <Button x:Name="Next" Text="Next" Clicked="Next_Clicked" HorizontalOptions="End" />
-            </HorizontalStackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="Previous" Text="Previous" Clicked="Previous_Clicked" Grid.Column="0"/>
+                <Button x:Name="Next" Text="Next" Clicked="Next_Clicked" Grid.Column="2"/>
+
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="NewNote" Text="New Note" Grid.Column="0"/>
+                <Button x:Name="PrintNote" Text="Print Note" MaximumWidthRequest="200" Grid.Column="1"/>
+                <Button x:Name="DeleteNote" Text="Delete Note" Clicked="DeleteNote_Clicked" Grid.Column="2"/>
+
+            </Grid>
+
+            <StackLayout Orientation="Vertical">
+                </StackLayout>
 
             <HorizontalStackLayout Spacing="5">
 
@@ -38,20 +58,30 @@
 
             </HorizontalStackLayout>
 
-            <HorizontalStackLayout Spacing="50">
-                <Label Text="Piece"/>
-                <Label Text="Quantity"/>
-                <Label Text="Description"/>
-                <Label Text="Price"/>
-                <Label Text="Amount"/>
-                <Button x:Name="AddNoteLine" Text="+" Clicked="AddNoteLine_Clicked" />
-            </HorizontalStackLayout>
+            <Grid Margin="5,25,5,5" Padding="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="50" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Piece" Grid.Column="0" HorizontalOptions="Center"/>
+                <Label Text="Quantity" Grid.Column="1" HorizontalOptions="Center"/>
+                <Label Text="Description" Grid.Column="2" HorizontalOptions="Center"/>
+                <Label Text="Price" Grid.Column="3" HorizontalOptions="Center"/>
+                <Label Text="Amount" Grid.Column="4" HorizontalOptions="Center"/>
+                <Button x:Name="AddNoteLine" Text="+" Clicked="AddNoteLine_Clicked" Grid.Column="5" HorizontalOptions="Center"/>
+
+            </Grid>
 
             <VerticalStackLayout x:Name="NoteLines">
                 
             </VerticalStackLayout>
 
-            <Button x:Name="Save" Clicked="Save_Clicked" Text="Save" />
+            <Button x:Name="Save" Clicked="Save_Clicked" Text="Save" Margin="20" />
 
         </VerticalStackLayout>
     </ScrollView>

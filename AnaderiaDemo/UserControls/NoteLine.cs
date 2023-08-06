@@ -45,15 +45,29 @@
 
         void Initialize()
         {
-            var container = new HorizontalStackLayout
+            var container = new Grid
             {
-                Spacing = 35
-            };            
+                Margin = 5,
+                Padding = 5
+            };
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 100 });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 100 });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width =  GridLength.Star});
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 100 });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 100 });
+            container.ColumnDefinitions.Add(new ColumnDefinition() { Width = 50 });
 
             quantity.Unfocused += Entry_Unfocused;
             price.Unfocused += Entry_Unfocused;
             amount.IsEnabled = false;
             removeLine.Clicked += RemoveLine_Clicked;
+
+            piece.SetValue(Grid.ColumnProperty, 0);
+            quantity.SetValue(Grid.ColumnProperty, 1);
+            description.SetValue(Grid.ColumnProperty, 2);
+            price.SetValue(Grid.ColumnProperty, 3);
+            amount.SetValue(Grid.ColumnProperty, 4);
+            removeLine.SetValue(Grid.ColumnProperty, 5);
 
             container.Children.Add(piece);
             container.Children.Add(quantity);
