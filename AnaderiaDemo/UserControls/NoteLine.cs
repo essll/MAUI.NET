@@ -14,9 +14,9 @@
             get => piece.Text; 
             set => piece.Text = value;
         }
-        public int Quantity
+        public decimal Quantity
         {
-            get => int.Parse(quantity.Text);
+            get => decimal.Parse(quantity.Text);
             set => quantity.Text = value.ToString();
         }
         public string Description
@@ -91,7 +91,7 @@
         {
             try
             {
-                int qty = int.Parse(quantity.Text);
+                var qty = decimal.Parse(quantity.Text);
                 decimal pricePerQuantity = decimal.Parse(price.Text);
                 amount.Text = string.Format("{0:#.00}", qty * pricePerQuantity);
             }

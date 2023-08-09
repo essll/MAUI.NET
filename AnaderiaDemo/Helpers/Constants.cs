@@ -8,7 +8,7 @@ namespace AnaderiaDemo.Helpers
 {
     internal static class Constants
     {
-
+        public const string AppName = "Ganaderia";
         public const string DatabaseFilename = "notes.db3";
         public static string DatabasePath =>
         Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);

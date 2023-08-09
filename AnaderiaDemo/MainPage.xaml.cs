@@ -1,5 +1,7 @@
-﻿using AnaderiaDemo.Helpers;
+﻿
+using AnaderiaDemo.Helpers;
 using AnaderiaDemo.Models;
+using Ganaderia.Helpers;
 
 namespace AnaderiaDemo
 {
@@ -255,6 +257,39 @@ namespace AnaderiaDemo
         private void NewNote_Clicked(object sender, EventArgs e)
         {            
             InitializeNewNote();
+        }
+
+        private void PrintNote_Clicked(object sender, EventArgs e)
+        {
+            var html = "<html>\r\n\r\n<head>\r\n</head>\r\n\r\n<body onload=\"window.print();\">\r\n    Testing Ganaderia\r\n\r\n</body>\r\n\r\n</html>";
+#if ANDROID
+            AndroidHelper.PrintHtml(html);
+#elif WINDOWS
+
+            if (ViewReceipt.IsVisible)
+            {
+                ViewReceipt.IsVisible = false;
+                ViewReceipt.Source = new HtmlWebViewSource
+                {
+                    Html = ""
+                };
+                PrintNote.Text = "Print Note";
+            }
+            else
+            {
+                ViewReceipt.Source = new HtmlWebViewSource
+                {
+                    Html = html
+                };
+                ViewReceipt.IsVisible = true;
+                PrintNote.Text = "Hide Printing";
+            }            
+
+            //ViewReceipt.Reload();
+
+            //WindowsHelper.PrintHtml(html);
+#endif
+
         }
     }
 }

@@ -36,10 +36,11 @@
                 </Grid.ColumnDefinitions>
 
                 <Button x:Name="NewNote" Text="New Note" Clicked="NewNote_Clicked" Grid.Column="0"/>
-                <!--<Button x:Name="PrintNote" Text="Print Note" MaximumWidthRequest="200" Grid.Column="1"/>-->
+                <Button x:Name="PrintNote" Text="Print Note" Clicked="PrintNote_Clicked" MaximumWidthRequest="200" Grid.Column="1"/>
                 <Button x:Name="DeleteNote" Text="Delete Note" Clicked="DeleteNote_Clicked" Grid.Column="2"/>
-
             </Grid>
+
+            <WebView x:Name="ViewReceipt" HeightRequest="600" IsVisible="False" />
 
             <HorizontalStackLayout Spacing="5">
 
@@ -80,7 +81,7 @@
                 
             </VerticalStackLayout>
 
-            <Button x:Name="Save" Clicked="Save_Clicked" Text="Save" Margin="20" />
+            <Button x:Name="Save" Clicked="Save_Clicked" Text="Save" Margin="20" />            
 
         </VerticalStackLayout>
     </ScrollView>

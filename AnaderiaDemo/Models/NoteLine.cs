@@ -13,7 +13,7 @@ namespace AnaderiaDemo.Models
         public string Piece { get; set; }
 
         [Column("quantity")]
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
         [Column("description")]
         public string Description { get; set; }
