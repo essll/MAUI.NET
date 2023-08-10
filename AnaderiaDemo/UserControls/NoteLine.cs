@@ -37,6 +37,8 @@
 
         public event EventHandler RemoveLine;
 
+        public event EventHandler AmountChanged;
+
 
         public NoteLine()
         {
@@ -94,12 +96,15 @@
                 var qty = decimal.Parse(quantity.Text);
                 decimal pricePerQuantity = decimal.Parse(price.Text);
                 amount.Text = string.Format("{0:#.00}", qty * pricePerQuantity);
+                AmountChanged?.Invoke(this, e);
             }
             catch{ }            
         }
 
         public void Dispose()
         {
+            piece.Unfocused -= Entry_Unfocused;
+            description.Unfocused -= Entry_Unfocused;
             quantity.Unfocused -= Entry_Unfocused;
             price.Unfocused -= Entry_Unfocused;
             removeLine.Clicked -= RemoveLine_Clicked;

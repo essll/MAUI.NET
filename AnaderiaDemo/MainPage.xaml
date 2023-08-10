@@ -81,6 +81,24 @@
                 
             </VerticalStackLayout>
 
+            <Grid Margin="5,25,5,5" Padding="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+
+                
+                <RadioButton x:Name="CR" Content="CR" IsChecked="True" Grid.Column="1" />
+                <RadioButton x:Name="CO" Content="CO"  IsChecked="False" Grid.Column="2" />
+                <Label Text="Total" Grid.Column="3" />
+                <Entry x:Name="TotalAmount" IsEnabled="False" Grid.Column="4" />
+
+            </Grid>
+
             <Button x:Name="Save" Clicked="Save_Clicked" Text="Save" Margin="20" />            
 
         </VerticalStackLayout>

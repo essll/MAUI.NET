@@ -31,6 +31,9 @@ namespace AnaderiaDemo
                 notesCounter--;
 
             Nombre.Text = notes[notesCounter].Name;
+            CR.IsChecked = notes[notesCounter].IsCr;
+            CO.IsChecked = notes[notesCounter].IsCo;
+
             LoadNoteLines();    
         }
 
@@ -55,8 +58,12 @@ namespace AnaderiaDemo
                 noteLineControl.Amount = noteLine.Amount;
 
                 noteLineControl.RemoveLine += NoteLine_RemoveLine;
+                noteLineControl.AmountChanged += NoteLine_AmountChanged;
+
                 NoteLines.Children.Add(noteLineControl);
             }
+
+            NoteLine_AmountChanged(null, null);
         }
 
         private void InitializeNewNote()
@@ -82,7 +89,12 @@ namespace AnaderiaDemo
 
         private void NoteLine_RemoveLine(object sender, EventArgs e)
         {
-            NoteLines.Children.Remove((IView)sender);
+            var noteLineControl = (UserControls.NoteLine)sender;
+            NoteLines.Children.Remove(noteLineControl);
+            noteLineControl.RemoveLine -= NoteLine_RemoveLine;
+            noteLineControl.AmountChanged -= NoteLine_AmountChanged;
+            noteLineControl.Dispose();
+            NoteLine_AmountChanged(null, null);
         }
 
         private async void Save_Clicked(object sender, EventArgs e)
@@ -116,7 +128,10 @@ namespace AnaderiaDemo
             var note = new Note()
             {
                 Name = Nombre.Text,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                IsCo = CO.IsChecked,
+                IsCr = CR.IsChecked,
+                TotalAmount = decimal.Parse(TotalAmount.Text)
             };
             var createdNotes = await Database.InsertItem(note);
             if (createdNotes != 1)
@@ -146,6 +161,9 @@ namespace AnaderiaDemo
         {
             notes[notesCounter].Name = Nombre.Text;
             notes[notesCounter].UpdateAt = DateTime.Now;
+            notes[notesCounter].IsCo = CO.IsChecked;
+            notes[notesCounter].IsCr = CR.IsChecked;
+            notes[notesCounter].TotalAmount = decimal.Parse(TotalAmount.Text);
 
             var updatedNotes = await Database.UpdateItem(notes[notesCounter]);
             if (updatedNotes != 1)
@@ -193,7 +211,21 @@ namespace AnaderiaDemo
         {
             var noteLine = new UserControls.NoteLine();
             noteLine.RemoveLine += NoteLine_RemoveLine;
+            noteLine.AmountChanged += NoteLine_AmountChanged;
             NoteLines.Children.Add(noteLine);
+        }
+
+        private void NoteLine_AmountChanged(object sender, EventArgs e)
+        {
+            decimal totalAmount = default(decimal);
+            foreach (var noteLineView in NoteLines.Children)
+            {
+                if (noteLineView is UserControls.NoteLine noteLineControl)
+                {
+                    totalAmount += noteLineControl.Amount;
+                }
+            }
+            TotalAmount.Text = string.Format("{0:#.00}", totalAmount);
         }
 
         private void Previous_Clicked(object sender, EventArgs e)
