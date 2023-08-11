@@ -2,6 +2,7 @@
 using AnaderiaDemo.Helpers;
 using AnaderiaDemo.Models;
 using Ganaderia.Helpers;
+using System.Text;
 
 namespace AnaderiaDemo
 {
@@ -33,6 +34,7 @@ namespace AnaderiaDemo
             Nombre.Text = notes[notesCounter].Name;
             CR.IsChecked = notes[notesCounter].IsCr;
             CO.IsChecked = notes[notesCounter].IsCo;
+            Fecha.Date = notes[notesCounter].CreatedAt;
 
             LoadNoteLines();    
         }
@@ -293,7 +295,66 @@ namespace AnaderiaDemo
 
         private void PrintNote_Clicked(object sender, EventArgs e)
         {
-            var html = "<html>\r\n\r\n<head>\r\n</head>\r\n\r\n<body onload=\"window.print();\">\r\n    Testing Ganaderia\r\n\r\n</body>\r\n\r\n</html>";
+            var html = "<html>\r\n\r\n<head>\r\n    <title>Ganaderia</title>\r\n</head>\r\n\r\n<body onload=\"window.print();\">\r\n<div>\r\n        Folio : {@Folio}\r\n    </div>\r\n        <div>\r\n        Fecha : {@Fecha}\r\n    </div>\r\n    <div>\r\n        Nombre : {@Nombre}\r\n    </div>\r\n    <div>\r\n        <table>\r\n            <tr>\r\n                <th>\r\n                    Cantidad KG\r\n                </th>\r\n                <th>\r\n                    Descripcion\r\n                </th>\r\n                <th>\r\n                    Precio\r\n                </th>\r\n                <th>\r\n                    Importe\r\n                </th>\r\n            </tr>\r\n            {@CustomRows}\r\n        </table>\r\n    </div>\r\n\r\n</body>\r\n\r\n</html>";
+
+            var customRowsHtml = new StringBuilder();
+            foreach (var noteLineView in NoteLines.Children)
+            {
+                if (noteLineView is UserControls.NoteLine noteLineControl)
+                {
+                    customRowsHtml.Append("<tr>");
+
+                    customRowsHtml.Append("<td>");
+                    customRowsHtml.Append(noteLineControl.Quantity.ToString());
+                    customRowsHtml.Append("</td>");
+
+                    customRowsHtml.Append("<td>");
+                    customRowsHtml.Append(noteLineControl.Description);
+                    customRowsHtml.Append("</td>");
+
+                    customRowsHtml.Append("<td>");
+                    customRowsHtml.Append(noteLineControl.Price);
+                    customRowsHtml.Append("</td>");
+
+                    customRowsHtml.Append("<td>");
+                    customRowsHtml.Append(noteLineControl.Amount);
+                    customRowsHtml.Append("</td>");
+
+                    customRowsHtml.Append("</tr>");
+                }
+            }
+
+            customRowsHtml.Append("<tr>");
+
+            customRowsHtml.Append("<td>");
+            if (notes[notesCounter].IsCr)
+                customRowsHtml.Append("CR");
+            customRowsHtml.Append("</td>");
+
+            customRowsHtml.Append("<td>");
+            if (notes[notesCounter].IsCo)
+                customRowsHtml.Append("CO");
+            customRowsHtml.Append("</td>");
+
+            customRowsHtml.Append("<td>");
+            customRowsHtml.Append("Total");
+            customRowsHtml.Append("</td>");
+
+            customRowsHtml.Append("<td>");
+            customRowsHtml.Append(TotalAmount.Text);
+            customRowsHtml.Append("</td>");
+
+            customRowsHtml.Append("</tr>");
+
+
+            html = html.Replace("{@Folio}", notes[notesCounter].Id.ToString());
+            html = html.Replace("{@Fecha}", notes[notesCounter].CreatedAt.ToString());
+
+            html = html.Replace("{@Nombre}", notes[notesCounter].Name);
+
+            html = html.Replace("{@CustomRows}", customRowsHtml.ToString());
+
+           
 #if ANDROID
             AndroidHelper.PrintHtml(html);
 #elif WINDOWS
