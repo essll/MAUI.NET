@@ -36,7 +36,9 @@ namespace AnaderiaDemo
             CO.IsChecked = notes[notesCounter].IsCo;
             Fecha.Date = notes[notesCounter].CreatedAt;
 
-            LoadNoteLines();    
+            LoadNoteLines();
+
+            PrintNote.IsVisible = true;
         }
 
         private async void LoadNoteLines()
@@ -76,6 +78,7 @@ namespace AnaderiaDemo
             foreach(UserControls.NoteLine noteLine in NoteLines.Children)
             {
                 noteLine.RemoveLine -= NoteLine_RemoveLine;
+                noteLine.AmountChanged -= NoteLine_AmountChanged;
             }
 
             NoteLines.Children.Clear();
@@ -84,9 +87,11 @@ namespace AnaderiaDemo
             {
                 var noteLine = new UserControls.NoteLine();
                 noteLine.RemoveLine += NoteLine_RemoveLine;
+                noteLine.AmountChanged += NoteLine_AmountChanged;
                 NoteLines.Children.Add(noteLine);
             }
             notesCounter = notes.Count();
+            PrintNote.IsVisible = false;
         }
 
         private void NoteLine_RemoveLine(object sender, EventArgs e)
@@ -115,14 +120,13 @@ namespace AnaderiaDemo
                 }
 
                 Save.Text = "Save";
+                PrintNote.IsVisible = true;
                 
             }
             catch (Exception ex)
             {
                 Save.Text = "Error: " + ex.Message;
             }
-            
-
         }
 
         private async Task CreateNote()
@@ -227,7 +231,7 @@ namespace AnaderiaDemo
                     totalAmount += noteLineControl.Amount;
                 }
             }
-            TotalAmount.Text = string.Format("{0:#.00}", totalAmount);
+            TotalAmount.Text = string.Format("{0:#0.00}", totalAmount);
         }
 
         private void Previous_Clicked(object sender, EventArgs e)
@@ -295,6 +299,8 @@ namespace AnaderiaDemo
 
         private void PrintNote_Clicked(object sender, EventArgs e)
         {
+            if(notesCounter >= notes.Count) return;
+
             var html = "<html>\r\n\r\n<head>\r\n    <title>Ganaderia</title>\r\n</head>\r\n\r\n<body onload=\"window.print();\">\r\n<div>\r\n        Folio : {@Folio}\r\n    </div>\r\n        <div>\r\n        Fecha : {@Fecha}\r\n    </div>\r\n    <div>\r\n        Nombre : {@Nombre}\r\n    </div>\r\n    <div>\r\n        <table>\r\n            <tr>\r\n                <th>\r\n                    Cantidad KG\r\n                </th>\r\n                <th>\r\n                    Descripcion\r\n                </th>\r\n                <th>\r\n                    Precio\r\n                </th>\r\n                <th>\r\n                    Importe\r\n                </th>\r\n            </tr>\r\n            {@CustomRows}\r\n        </table>\r\n    </div>\r\n\r\n</body>\r\n\r\n</html>";
 
             var customRowsHtml = new StringBuilder();

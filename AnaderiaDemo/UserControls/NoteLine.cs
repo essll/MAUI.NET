@@ -16,7 +16,11 @@
         }
         public decimal Quantity
         {
-            get => decimal.Parse(quantity.Text);
+            get
+            {
+                decimal result = 0;
+                return decimal.TryParse(quantity.Text, out result) ? result : 0;
+            }
             set => quantity.Text = value.ToString();
         }
         public string Description
@@ -26,13 +30,21 @@
         }
         public decimal Price
         {
-            get => decimal.Parse(price.Text);
+            get
+            {
+                decimal result = 0;
+                return decimal.TryParse(price.Text, out result) ? result : 0;
+            }
             set => price.Text = value.ToString();
         }
         public decimal Amount
         {
-            get => decimal.Parse(amount.Text);
-            set => amount.Text = string.Format("{0:#.00}", value);
+            get
+            {
+                decimal result = 0;
+                return decimal.TryParse(amount.Text, out result) ? result : 0;
+            }
+            set => amount.Text = string.Format("{0:#0.00}", value);
         }
 
         public event EventHandler RemoveLine;
@@ -67,12 +79,24 @@
             amount.IsEnabled = false;
             removeLine.Clicked += RemoveLine_Clicked;
 
+            piece.HorizontalOptions = LayoutOptions.Start;
+            quantity.HorizontalOptions = LayoutOptions.Start;
+            price.HorizontalOptions = LayoutOptions.Start;
+            amount.HorizontalOptions = LayoutOptions.Start;
+
+            piece.WidthRequest = 100;
+            quantity.WidthRequest = 100;
+            price.WidthRequest = 100;
+            amount.WidthRequest = 100;
+
             piece.SetValue(Grid.ColumnProperty, 0);
             quantity.SetValue(Grid.ColumnProperty, 1);
             description.SetValue(Grid.ColumnProperty, 2);
             price.SetValue(Grid.ColumnProperty, 3);
             amount.SetValue(Grid.ColumnProperty, 4);
             removeLine.SetValue(Grid.ColumnProperty, 5);
+
+            
 
             container.Children.Add(piece);
             container.Children.Add(quantity);
