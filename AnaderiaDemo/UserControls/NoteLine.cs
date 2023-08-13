@@ -84,10 +84,11 @@
             price.HorizontalOptions = LayoutOptions.Start;
             amount.HorizontalOptions = LayoutOptions.Start;
 
-            piece.WidthRequest = 100;
-            quantity.WidthRequest = 100;
-            price.WidthRequest = 100;
+            piece.WidthRequest = 75;
+            quantity.WidthRequest = 75;
+            price.WidthRequest = 75;
             amount.WidthRequest = 100;
+            description.Margin = new Thickness(0, 0, 25, 0);
 
             piece.SetValue(Grid.ColumnProperty, 0);
             quantity.SetValue(Grid.ColumnProperty, 1);

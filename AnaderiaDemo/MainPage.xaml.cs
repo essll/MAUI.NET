@@ -306,7 +306,7 @@ namespace AnaderiaDemo
             var customRowsHtml = new StringBuilder();
             foreach (var noteLineView in NoteLines.Children)
             {
-                if (noteLineView is UserControls.NoteLine noteLineControl)
+                if (noteLineView is UserControls.NoteLine noteLineControl && noteLineControl.Amount > 0)
                 {
                     customRowsHtml.Append("<tr>");
 
