@@ -299,9 +299,9 @@ namespace AnaderiaDemo
 
         private void PrintNote_Clicked(object sender, EventArgs e)
         {
-            if(notesCounter >= notes.Count) return;
+            if (notesCounter >= notes.Count) return;
 
-            var html = "<html>\r\n\r\n<head>\r\n    <title>Ganaderia</title>\r\n</head>\r\n\r\n<body onload=\"window.print();\">\r\n<div>\r\n        Folio : {@Folio}\r\n    </div>\r\n        <div>\r\n        Fecha : {@Fecha}\r\n    </div>\r\n    <div>\r\n        Nombre : {@Nombre}\r\n    </div>\r\n    <div>\r\n        <table>\r\n            <tr>\r\n                <th>\r\n                    Cantidad KG\r\n                </th>\r\n                <th>\r\n                    Descripcion\r\n                </th>\r\n                <th>\r\n                    Precio\r\n                </th>\r\n                <th>\r\n                    Importe\r\n                </th>\r\n            </tr>\r\n            {@CustomRows}\r\n        </table>\r\n    </div>\r\n\r\n</body>\r\n\r\n</html>";
+            var html = "<html>\r\n\r\n<head>\r\n    <title>Ganaderia</title>\r\n</head>\r\n\r\n<body onload=\"window.print();\">\r\n    <div style=\"height: 100px; width: 100px;\">\r\n        <img src=\"logo.png\" alt=\"Ganaderia\" />\r\n    </div>\r\n<div>\r\n        Folio : {@Folio}\r\n    </div>\r\n        <div>\r\n        Fecha : {@Fecha}\r\n    </div>\r\n    <div>\r\n        Nombre : {@Nombre}\r\n    </div>\r\n    <div>\r\n        <table>\r\n            <tr>\r\n                <th>\r\n                    Cantidad KG\r\n                </th>\r\n                <th>\r\n                    Descripcion\r\n                </th>\r\n                <th>\r\n                    Precio\r\n                </th>\r\n                <th>\r\n                    Importe\r\n                </th>\r\n            </tr>\r\n            {@CustomRows}\r\n        </table>\r\n    </div>\r\n\r\n</body>\r\n\r\n</html>";
 
             var customRowsHtml = new StringBuilder();
             foreach (var noteLineView in NoteLines.Children)
@@ -360,7 +360,59 @@ namespace AnaderiaDemo
 
             html = html.Replace("{@CustomRows}", customRowsHtml.ToString());
 
-           
+            PrintHtml(html);
+
+        }
+
+        private async void PrintReport_Clicked(object sender, EventArgs e)
+        {
+            var allNotes = await Database.GetItems<Note>();
+            if (notes.Count() <= 0)
+                return;
+
+            var customRowsHtml = new StringBuilder();
+
+            foreach (var note in allNotes) 
+            {
+                if (note.CreatedAt.Date != DateTime.Now.Date)
+                    continue;
+
+                customRowsHtml.Append("<tr>");
+
+                customRowsHtml.Append("<td>");
+                customRowsHtml.Append(note.Id);
+                customRowsHtml.Append("</td>");
+
+                customRowsHtml.Append("<td>");
+                customRowsHtml.Append(note.CreatedAt);
+                customRowsHtml.Append("</td>");
+
+                customRowsHtml.Append("<td>");
+                customRowsHtml.Append(note.Name);
+                customRowsHtml.Append("</td>");
+
+                customRowsHtml.Append("<td>");
+                customRowsHtml.Append(note.IsCo ? "CO" : "CR");
+                customRowsHtml.Append("</td>");
+
+                customRowsHtml.Append("<td>");
+                customRowsHtml.Append(string.Format("{0:#0.00}", note.TotalAmount));
+                customRowsHtml.Append("</td>");
+
+                customRowsHtml.Append("</tr>");                   
+                
+            }
+
+            var html = "<html>\r\n\r\n<head>\r\n    <title>Ganaderia</title>\r\n<style>\r\n        table, th, td \r\n        {\r\n            border: 1px solid black;\r\n            border-collapse: collapse;\r\n        }\r\n    </style></head>\r\n\r\n<body onload=\"window.print();\">\r\n    <div style=\"height: 100px; width: 100px;\">\r\n        <img src=\"logo.png\" alt=\"Ganaderia\" />\r\n    </div><div>\r\n        <table>\r\n            <tr>\r\n                <th>\r\n                    Folio\r\n                </th>\r\n                <th>\r\n                    Fecha\r\n                </th>\r\n                <th>\r\n                    Nombre\r\n                </th>\r\n                <th>\r\n                    CR/CO\r\n                </th>\r\n                <th>\r\n                    Total\r\n                </th>\r\n            </tr>\r\n            {@CustomRows}\r\n        </table>\r\n    </div></body>\r\n\r\n</html>";
+
+            html = html.Replace("{@CustomRows}", customRowsHtml.ToString());
+            PrintHtml(html);
+        }
+
+        private void PrintHtml(string html)
+        {
+
+
 #if ANDROID
             AndroidHelper.PrintHtml(html);
 #elif WINDOWS
@@ -372,7 +424,7 @@ namespace AnaderiaDemo
                 {
                     Html = ""
                 };
-                PrintNote.Text = "Print Note";
+                //PrintNote.Text = "Print Note";
             }
             else
             {
@@ -381,14 +433,13 @@ namespace AnaderiaDemo
                     Html = html
                 };
                 ViewReceipt.IsVisible = true;
-                PrintNote.Text = "Hide Printing";
+                //PrintNote.Text = "Hide Printing";
             }            
 
             //ViewReceipt.Reload();
 
             //WindowsHelper.PrintHtml(html);
 #endif
-
         }
     }
 }
